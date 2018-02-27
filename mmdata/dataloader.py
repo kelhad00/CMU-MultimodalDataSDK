@@ -1,7 +1,13 @@
 import os
-from dataset import Dataset
-from cPickle import load
-from utils import download
+import sys
+from mmdata.dataset import Dataset
+if sys.version_info[0] == 2:
+    print("cPickle used")
+    from cPickle import load
+elif sys.version_info[0] == 3:
+    print("pickle of python3 used")
+    from pickle import load
+from mmdata.utils import download
 
 class Dataloader(object):
     """Loader object for datasets"""
@@ -26,7 +32,7 @@ class Dataloader(object):
             try:
                 feature_values = load(fp)
             except:
-                print "The previously downloaded dataset is compromised, downloading a new copy..."
+                print("The previously downloaded dataset is compromised, downloading a new copy...")
                 dowloaded = download(self.dataset, feature, self.location)
                 if not downloaded:
                     return None
@@ -102,11 +108,11 @@ class MOSI(Dataloader):
     """Dataloader for CMU-MOSI dataset"""
     def __init__(self):
         super(MOSI, self).__init__('http://sorena.multicomp.cs.cmu.edu/downloads/MOSI')
-        print "This API will be deprecated in the future versions. Please check the Github page for the current API"
+        print("This API will be deprecated in the future versions. Please check the Github page for the current API")
 
 
 class MOSEI(Dataloader):
     """Dataloader for CMU-MOSEI dataset"""
     def __init__(self):
         super(MOSEI, self).__init__('http://sorena.multicomp.cs.cmu.edu/downloads/MOSEI')
-        print "This API will be deprecated in the future versions. Please check the Github page for the current API"
+        print("This API will be deprecated in the future versions. Please check the Github page for the current API")

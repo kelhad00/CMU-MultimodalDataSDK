@@ -3,7 +3,8 @@
 The file contains the class and methods for loading and aligning datasets
 """
 import numpy as np
-import urllib2
+# import urllib2
+import requests
 import sys
 import os
 from subprocess import call
@@ -30,17 +31,19 @@ def download(dataset, feature, dest):
     call(['mkdir', '-p', dest])
     url = dataset + '/' + feature + '.pkl'
     file_path = os.path.join(dest, feature + '.pkl')
-    print file_path
+    print(file_path)
 
     try:
-        u = urllib2.urlopen(url)
-    except urllib2.HTTPError:
-        print "The requested data is not available for {} dataset.".format(dataset)
+        # u = urllib2.urlopen(url)
+        u = requests.get(url)
+    # except urllib2.HTTPError:
+    except requests.HTTPError:
+        print("The requested data is not available for {} dataset.".format(dataset))
         return False
     with open(file_path, 'wb') as f:
         meta = u.info()
         file_size = int(meta.getheaders("Content-Length")[0])
-        print "Downloading: {}, size: {}".format(' '.join([dataset, feature]), file_size)
+        print("Downloading: {}, size: {}".format(' '.join([dataset, feature]), file_size))
 
         file_size_dl = 0
         block_sz = 8192
@@ -60,17 +63,19 @@ def download_raw(dataset, dest):
     call(['mkdir', '-p', dest])
     url = dataset + '/' + dataset + '.tar'
     file_path = os.path.join(dest, dataset + '.tar')
-    print file_path
+    print(file_path)
 
     try:
-        u = urllib2.urlopen(url)
-    except urllib2.HTTPError:
-        print "The requested data is not available for {} dataset.".format(dataset)
+        # u = urllib2.urlopen(url)
+        u = requests.get(url)
+    # except urllib2.HTTPError:
+    except requests.HTTPError:
+        print("The requested data is not available for {} dataset.".format(dataset))
         return False
     with open(file_path, 'wb') as f:
         meta = u.info()
         file_size = int(meta.getheaders("Content-Length")[0])
-        print "Downloading: {}, size: {}".format(' '.join([dataset, feature]), file_size)
+        print("Downloading: {}, size: {}".format(' '.join([dataset, feature]), file_size))
 
         file_size_dl = 0
         block_sz = 8192
