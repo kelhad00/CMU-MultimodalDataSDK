@@ -35,20 +35,22 @@ def download(dataset, feature, dest):
 
     try:
         # u = urllib2.urlopen(url)
-        u = requests.get(url)
+        u = requests.get(url, stream = True)
     # except urllib2.HTTPError:
     except requests.HTTPError:
         print("The requested data is not available for {} dataset.".format(dataset))
         return False
     with open(file_path, 'wb') as f:
-        meta = u.info()
-        file_size = int(meta.getheaders("Content-Length")[0])
+        # meta = u.info()
+        # file_size = int(meta.getheaders("Content-Length")[0])
+        file_size = int(u.headers["Content-Length"])
         print("Downloading: {}, size: {}".format(' '.join([dataset, feature]), file_size))
 
         file_size_dl = 0
         block_sz = 8192
         while True:
-            buffer = u.read(block_sz)
+            # buffer = u.read(block_sz)
+            buffer = u.raw.read(block_sz)
             if not buffer:
                 break
             file_size_dl += len(buffer)
@@ -67,20 +69,22 @@ def download_raw(dataset, dest):
 
     try:
         # u = urllib2.urlopen(url)
-        u = requests.get(url)
+        u = requests.get(url, stream = True)
     # except urllib2.HTTPError:
     except requests.HTTPError:
         print("The requested data is not available for {} dataset.".format(dataset))
         return False
     with open(file_path, 'wb') as f:
-        meta = u.info()
-        file_size = int(meta.getheaders("Content-Length")[0])
+        # meta = u.info()
+        # file_size = int(meta.getheaders("Content-Length")[0])
+        file_size = int(u.headers["Content-Length"])
         print("Downloading: {}, size: {}".format(' '.join([dataset, feature]), file_size))
 
         file_size_dl = 0
         block_sz = 8192
         while True:
-            buffer = u.read(block_sz)
+            # buffer = u.read(block_sz)
+            buffer = u.raw.read(block_sz)
             if not buffer:
                 break
             file_size_dl += len(buffer)

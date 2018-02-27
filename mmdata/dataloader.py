@@ -30,7 +30,10 @@ class Dataloader(object):
         # TODO: check MD5 values and etc. to ensure the downloaded dataset's intact
         with open(feature_path, 'rb') as fp:
             try:
-                feature_values = load(fp)
+                if sys.version_info[0] == 2:
+                    feature_values = load(fp)
+                elif sys.version_info[0] == 3:
+                    feature_values = load(fp, encoding='latin1')
             except:
                 print("The previously downloaded dataset is compromised, downloading a new copy...")
                 dowloaded = download(self.dataset, feature, self.location)
